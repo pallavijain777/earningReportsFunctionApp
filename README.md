@@ -39,7 +39,7 @@ All sensitive values are pulled securely from **Azure Key Vault**.
 
 ## 🏗️ System Architecture
 
-![System Architecture](A_flowchart-style_digital_diagram_presents_a_cloud.png)
+![System Architecture](https://github.com/pallavijain777/earningReportsFunctionApp/blob/master/ArchitectureDiagram.png?raw=true)
 
 **Flow**
 1. Upload `company/quarter/report.pdf` to **Azure Blob Storage**  
