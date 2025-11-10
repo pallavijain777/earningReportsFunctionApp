@@ -1,35 +1,39 @@
 # 💼 Earnings Reports Analyzer  
-### _AI-Powered Financial Insight Engine — Built with Azure OpenAI, Semantic Kernel & Serverless Functions_
+### _AI-Powered Financial Insight Engine — Azure OpenAI • Semantic Kernel • Serverless Functions_
 
 ---
 
-## 🧭 Overview
-**Earnings Reports Analyzer** is a cloud-native, serverless AI system that automatically processes company earnings reports (PDFs), summarizes financial performance, and performs sentiment analysis using **Azure OpenAI + Semantic Kernel**.  
-All secrets and connection strings are securely managed via **Azure Key Vault**, and results are persisted in **Azure SQL Database** for downstream analytics and reporting.
+## 🧠 Overview
+**Earnings Reports Analyzer** is an end-to-end **AI automation** that turns unstructured PDF earnings reports into **structured, queryable insights**.  
+It watches an Azure Blob container, extracts PDF text, orchestrates Azure OpenAI via **Semantic Kernel plugins** to produce a clean **summary** and **sentiment score**, then persists the results to **Azure SQL**.  
+All sensitive values are pulled securely from **Azure Key Vault**.
 
 ---
 
-## 🚀 Tech Stack
+## ⚙️ Tech Stack
+
 | Layer | Technologies |
-|:------|:--------------|
-| **Compute / Orchestration** | Azure Functions (.NET 8 Timer Trigger) |
-| **AI Orchestration** | Microsoft Semantic Kernel + Azure OpenAI (GPT-4 family) |
-| **Storage** | Azure Blob Storage (Reports) |
-| **Database** | Azure SQL Server (EF Core) |
+|:--|:--|
+| **AI Reasoning** | Azure OpenAI via Semantic Kernel |
+| **AI Orchestration** | Custom SK Plugins (Summarization, Sentiment) |
+| **Compute** | Azure Functions (.NET 8, Timer Trigger) |
+| **Storage** | Azure Blob Storage |
+| **Database** | Azure SQL + EF Core 8 |
 | **Secrets & Config** | Azure Key Vault |
-| **PDF Parsing** | PdfPig .NET Library |
+| **PDF Parsing** | PdfPig (.NET) |
+| **Observability** | Azure Application Insights |
 
 ---
 
-## 🌟 Key Features
-| ✅ Feature | 💡 Description |
-|:-----------|:---------------|
-| **Serverless AI Processing** | Automatically detects & processes new reports via a timer-triggered Azure Function |
-| **Semantic Kernel Integration** | Uses SK plugins for Summarization & Sentiment Analysis |
-| **Secure Configuration** | All secrets stored and fetched from Azure Key Vault |
-| **Data Persistence** | Stores metadata, summaries & sentiment in Azure SQL Server (via EF Core) |
-| **Idempotent Execution** | Prevents re-processing of already analyzed reports (using blob metadata tags) |
-| **Cloud-Native Stack** | Built with Azure Functions, OpenAI, SQL, Blob Storage & Key Vault |
+## 🌟 AI Features
+
+| 🤖 Feature | 💡 Description |
+|:--|:--|
+| **LLM Summarization** | Generates concise, analyst-style summaries with key metrics, risks, and outlook. |
+| **Sentiment Intelligence** | Computes a 1–10 sentiment score with a brief rationale. |
+| **Prompt Engineering** | Deterministic prompts with JSON-schema outputs for safe ingestion. |
+| **Plugin Architecture** | Add new SK functions (e.g., KPI extraction, trend detection) with minimal wiring. |
+| **Idempotent Processing** | Blob metadata prevents re-processing of already analyzed reports. |
 
 ---
 
@@ -37,54 +41,99 @@ All secrets and connection strings are securely managed via **Azure Key Vault**,
 
 ![System Architecture](A_flowchart-style_digital_diagram_presents_a_cloud.png)
 
-### **Processing Flow**
-1. **Upload** company reports (`company/quarter/report.pdf`) to **Azure Blob Storage**.  
-2. **Azure Function (Orchestrator)** triggers automatically (e.g., daily at 12 PM UTC).  
-3. Function extracts text from PDF using **PdfPig**.  
-4. Text is passed to **Semantic Kernel**, which calls Azure OpenAI (GPT-4) via two plugins:  
-   - 🧩 Summarize Earnings Report Plugin  
-   - 💬 Sentiment Analysis Plugin  
-5. Results (summary + sentiment score) are stored in **Azure SQL Database** through EF Core.  
-6. Secrets and connection strings are securely resolved from **Azure Key Vault**.  
-7. Processed reports are marked to prevent re-processing.
+**Flow**
+1. Upload `company/quarter/report.pdf` to **Azure Blob Storage**  
+2. **Azure Function** (timer) runs once daily at **12:00 UTC**  
+3. **PdfPig** extracts text from the PDF  
+4. **Semantic Kernel** calls Azure OpenAI using two plugins:  
+   - `SummarizeReport()`  
+   - `AnalyzeSentiment()`  
+5. Persist summary + sentiment to **Azure SQL** via EF Core  
+6. Resolve secrets and connection strings from **Azure Key Vault**  
+7. Tag blob to mark it **processed** (idempotency)
 
 ---
 
-## 🧠 AI Capabilities
-| Capability | Description |
-|:------------|:-------------|
-| **Summarization** | Generates 8–10 line financial summaries highlighting revenue, profit/loss, and future outlook |
-| **Sentiment Scoring** | Scores each report from 1–10 and provides a brief analysis rationale |
-| **Self-Healing Retries** | Handles transient failures and logs Processing Runs for diagnostics |
-| **Extensible Plugin Design** | Easy to add custom Semantic Kernel functions for new AI tasks |
+## 🧩 Semantic Kernel Plugin Layer
+
+| Plugin | Function | Description |
+|:--|:--|:--|
+| **FinancialAnalysisPlugin** | `SummarizeReport()` | Produces structured, concise summaries suited for BI/analytics. |
+| **FinancialAnalysisPlugin** | `AnalyzeSentiment()` | Returns sentiment score between 1-10 |
+
+Each function is **prompt-engineered** for consistency and downstream safety.
 
 ---
 
-## 🔐 Security
-- Secrets and API keys never hard-coded — all resolved from **Azure Key Vault**  
-- **Managed Identity** support for production deployments  
-- **EF Core + Parameterized Queries** prevent SQL injection  
-- Blob metadata used for idempotency and audit logging  
+## 🗄️ Database Schema Overview
+
+| Table | Description |
+|:--|:--|
+| **Company** | Stores company info & identifiers |
+| **FiscalQuarter** | Quarter/year metadata |
+| **Report** | PDF upload record & processing status |
+| **ReportInsight** | AI-generated summary & sentiment |
+| **ProcessingRun** | Tokens, cost, latency, status for observability |
 
 ---
 
-## ⚙️ Deployment
-1. Create an **Azure Function App** (.NET 8 Isolated Process).  
-2. Set up **Azure Blob Storage**, **Azure SQL Database**, and **Azure Key Vault**.  
-3. Add these secrets in Key Vault:  
-   - `AZURE-OPENAI-KEY`  
-   - `AZURE-OPENAI-ENDPOINT`  
-   - `AZURE-OPENAI-DEPLOYMENT`  
-   - `SQL-CONNECTION-STRING`  
-   - `AZURE-STORAGE-CONNECTION`  
-4. Deploy via Visual Studio or GitHub Actions using `func azure functionapp publish`.  
-5. Verify logs in Azure Monitor for function executions.  
+## 🔐 Security Highlights
+- **No secrets in code** — everything comes from **Azure Key Vault**  
+- Supports **Managed Identity** in production  
+- EF Core with parameterization to **avoid injection**  
+- Blob metadata used for **idempotency** and auditability  
+- Deterministic JSON outputs to **reduce hallucination risk**
 
 ---
 
-## 📊 Sample Output
+## 📊 Sample AI Output
+
 ```json
 {
-  "score": 8,
-  "brief": "The earnings report reflects strong performance with rising revenues, improved margins, and positive management commentary on AI investments."
+  "summary": "The company reported 12% YoY revenue growth driven by AI services demand. Margins improved despite FX pressures. Management expects continued investment in cloud and AI expansion.",
+  "sentimentscore": 8
 }
+```
+
+---
+
+## 🚀 Deploy
+
+1. **Provision Azure resources**
+   - Function App (.NET 8)
+   - Azure SQL Database
+   - Azure Storage (Blob)
+   - Azure Key Vault
+   - Azure OpenAI resource
+
+2. **Add Key Vault secrets**
+   ```
+   AZURE-OPENAI-KEY
+   AZURE-OPENAI-ENDPOINT
+   AZURE-OPENAI-DEPLOYMENT
+   SQL-CONNECTION-STRING
+   AZURE-STORAGE-CONNECTION
+   ```
+
+3. **App settings**
+   - `KEY_VAULT_URL` → your vault URI  
+   - Enable **System Assigned Managed Identity** for the Function App and grant **Key Vault Secrets User** (or appropriate) access.
+
+4. **Publish the function**
+   ```bash
+   func azure functionapp publish <your-function-app-name>
+   ```
+
+5. **Schedule (host.json / attribute)**
+   - Cron: `0 0 12 * * *`  → daily at **12:00 UTC**
+
+6. **Monitor**
+   - Azure Application Insights → traces, dependencies, exceptions
+
+---
+
+## 👤 Author
+**Pallavi Jain** — Engineering Leader • Full-Stack Architect • Applied AI  
+LinkedIn: https://linkedin.com/in/pallavijain7
+
+> _Turning unstructured earnings reports into structured, explainable insights with Azure OpenAI and serverless AI orchestration._
