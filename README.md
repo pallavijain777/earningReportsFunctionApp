@@ -1,6 +1,8 @@
 # 💼 Earnings Reports Analyzer  
 ### _AI-Powered Financial Insight Engine — Azure OpenAI • Semantic Kernel • Serverless Functions_
 
+![Banner](https://github.com/pallavijain777/earningReportsFunctionApp/blob/master/Banner.png?raw=true)
+
 ---
 
 ## 🧠 Overview
