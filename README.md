@@ -1,11 +1,11 @@
-# 💼 Earnings Reports Analyzer  
+# Earnings Reports Analyzer  
 ### _AI-Powered Financial Insight Engine — Azure OpenAI • Semantic Kernel • Serverless Functions_
 
 ![Banner](https://github.com/pallavijain777/earningReportsFunctionApp/blob/master/Banner.png?raw=true)
 
 ---
 
-## 🧠 Overview
+## Overview
 **Earnings Reports Analyzer** is an end-to-end **AI automation** that turns unstructured PDF earnings reports into **structured, queryable insights**.  
 It watches an Azure Blob container, extracts PDF text, orchestrates Azure OpenAI via **Semantic Kernel plugins** to produce a clean **summary** and **sentiment score**, then persists the results to **Azure SQL**.  
 All sensitive values are pulled securely from **Azure Key Vault**.
