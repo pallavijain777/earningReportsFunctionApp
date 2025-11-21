@@ -3,6 +3,8 @@
 
 ![Banner](https://github.com/pallavijain777/earningReportsFunctionApp/blob/master/Banner.png?raw=true)
 
+[![Watch the Demo](https://img.shields.io/badge/▶️%20Watch%20Demo-YouTube-red?style=for-the-badge)](https://youtu.be/DMhs7w3Ggkk)
+
 ---
 
 ## Overview
