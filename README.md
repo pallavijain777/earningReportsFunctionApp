@@ -3,9 +3,9 @@
 
 ![Banner](https://github.com/pallavijain777/earningReportsFunctionApp/blob/master/Banner.png?raw=true)
 
-[![Watch the Demo](https://img.shields.io/badge/▶️%20Watch%20Demo-YouTube-red?style=for-the-badge)](https://youtu.be/DMhs7w3Ggkk)
-
----
+<a href="https://youtu.be/DMhs7w3Ggkk" target="_blank">
+  <img src="https://img.shields.io/badge/▶️%20Watch%20Demo-YouTube-red?style=for-the-badge" />
+</a>
 
 ## Overview
 **Earnings Reports Analyzer** is an end-to-end **AI automation** that turns unstructured PDF earnings reports into **structured, queryable insights**.  
